@@ -35,12 +35,12 @@ jobs:
       # Step 4: Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t 158.160.44.209:5000/${{ github.repository | toLowerCase }}:${{ env.TAG }} .
+          docker build -t 158.160.44.209:5000/${{ env.REPO }}:${{ env.TAG }} .
 
       # Step 5: Push the Docker image
       - name: Push Docker image
         run: |
-          docker push 158.160.44.209:5000/${{ github.repository | toLowerCase }}:${{ env.TAG }}
+          docker push 158.160.44.209:5000/${{ env.REPO }}:${{ env.TAG }}
 
       # Step 6: Set up kubectl
       - name: Set up kubectl
