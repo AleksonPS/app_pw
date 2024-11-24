@@ -1,42 +1,56 @@
-name: Build and Push Docker Image
+name: Build, Push, and Deploy
 
 on:
   push:
-    tags: # Trigger the pipeline on new Git tags
+    tags: # Trigger pipeline on Git tags
       - '*'
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
+      # Step 2: Log in to Docker Registry (e.g., your private registry or Docker Hub)
+      - name: Log in to Docker Registry
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login 158.160.44.209:5000 -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Configure Docker daemon for insecure registry
-        run: |
-          echo '{"insecure-registries": ["158.160.44.209:5000"]}' | sudo tee /etc/docker/daemon.json
-          sudo systemctl restart docker
-
+      # Step 3: Extract Git tag for image versioning
       - name: Extract Git tag
         id: get_tag
         run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
-      - name: Convert repository name to lowercase
-        id: get_lowercase_repo
-        run: echo "REPO=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-
+      # Step 4: Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t 158.160.44.209:5000/${{ env.REPO }}:${{ env.TAG }} .
+          docker build -t 158.160.44.209:5000/${{ github.repository | toLowerCase }}:${{ env.TAG }} .
 
+      # Step 5: Push the Docker image
       - name: Push Docker image
         run: |
-          docker push 158.160.44.209:5000/${{ env.REPO }}:${{ env.TAG }}
+          docker push 158.160.44.209:5000/${{ github.repository | toLowerCase }}:${{ env.TAG }}
 
-      - name: Verify Docker Registry
+      # Step 6: Set up kubectl
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      # Step 7: Set up Helm
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'v3.12.0'
+
+      # Step 8: Deploy to Kubernetes using Helm
+      - name: Deploy application with Helm
         run: |
-          curl -s http://158.160.44.209:5000/v2/ || echo "Docker Registry is not reachable"
+          helm upgrade --install my-app ./helm-chart \
+            --set app.image.repository=158.160.44.209:5000/${{ github.repository | toLowerCase }} \
+            --set app.image.tag=${{ env.TAG }} \
+            --set app.service.type=LoadBalancer \
+            --set app.service.port=4554 \
+            --set app.service.externalIP=89.169.140.22

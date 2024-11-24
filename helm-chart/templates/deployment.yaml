@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-app
+  labels:
+    app: {{ .Release.Name }}-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-app
+    spec:
+      containers:
+      - name: app
+        image: {{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}
+        ports:
+        - containerPort: {{ .Values.app.port }}
+        env:
+        - name: DB_HOST
+          value: {{ .Values.app.env.DB_HOST }}
+        - name: DB_NAME
+          value: {{ .Values.app.env.DB_NAME }}
+        - name: DB_USER
+          value: {{ .Values.app.env.DB_USER }}
+        - name: DB_PASS
+          value: {{ .Values.app.env.DB_PASS }}
+        command:
+        - sh
+        - -c
+        - "python manage.py migrate && python manage.py runserver 0.0.0.0:{{ .Values.app.port }}"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-db
+  labels:
+    app: {{ .Release.Name }}-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-db
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-db
+    spec:
+      containers:
+      - name: db
+        image: {{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}
+        ports:
+        - containerPort: {{ .Values.db.port }}
+        env:
+        - name: POSTGRES_DB
+          value: {{ .Values.db.env.POSTGRES_DB }}
+        - name: POSTGRES_USER
+          value: {{ .Values.db.env.POSTGRES_USER }}
+        - name: POSTGRES_PASSWORD
+          value: {{ .Values.db.env.POSTGRES_PASSWORD }}
+        volumeMounts:
+        - name: db-storage
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: db-storage
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-db-pvc
