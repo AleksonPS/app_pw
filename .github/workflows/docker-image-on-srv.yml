@@ -20,16 +20,17 @@ jobs:
         id: get_tag
         run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
-      - name: Log in to Docker Registry (no credentials required)
-        run: echo "No login required for private registry"
+      - name: Convert repository name to lowercase
+        id: get_lowercase_repo
+        run: echo "REPO=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - name: Build Docker image
         run: |
-          docker build -t 158.160.44.209:5000/${{ github.repository }}:${{ env.TAG }} .
+          docker build -t 158.160.44.209:5000/${{ env.REPO }}:${{ env.TAG }} .
 
       - name: Push Docker image
         run: |
-          docker push 158.160.44.209:5000/${{ github.repository }}:${{ env.TAG }}
+          docker push 158.160.44.209:5000/${{ env.REPO }}:${{ env.TAG }}
 
       - name: Verify Docker Registry
         run: |
