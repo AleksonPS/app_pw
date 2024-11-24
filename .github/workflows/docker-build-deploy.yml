@@ -14,10 +14,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Log in to Docker Registry (e.g., your private registry or Docker Hub)
-      - name: Log in to Docker Registry
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login 158.160.44.209:5000 -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-      
+      # Step 2: Configure Docker daemon for insecure registry
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
       - name: Configure Docker daemon for insecure registry
         run: |
           echo '{"insecure-registries": ["158.160.44.209:5000"]}' | sudo tee /etc/docker/daemon.json
