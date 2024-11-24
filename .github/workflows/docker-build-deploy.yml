@@ -17,11 +17,20 @@ jobs:
       # Step 2: Log in to Docker Registry (e.g., your private registry or Docker Hub)
       - name: Log in to Docker Registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login 158.160.44.209:5000 -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      
+      - name: Configure Docker daemon for insecure registry
+        run: |
+          echo '{"insecure-registries": ["158.160.44.209:5000"]}' | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
 
       # Step 3: Extract Git tag for image versioning
       - name: Extract Git tag
         id: get_tag
         run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        
+      - name: Convert repository name to lowercase
+        id: get_lowercase_repo
+        run: echo "REPO=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       # Step 4: Build the Docker image
       - name: Build Docker image
