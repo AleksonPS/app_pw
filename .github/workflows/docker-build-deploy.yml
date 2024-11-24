@@ -58,7 +58,7 @@ jobs:
       - name: Deploy application with Helm
         run: |
           helm upgrade --install my-app ./helm-chart \
-            --set app.image.repository=158.160.44.209:5000/${{ github.repository | toLowerCase }} \
+            --set app.image.repository=158.160.44.209:5000/${{ env.REPO }} \
             --set app.image.tag=${{ env.TAG }} \
             --set app.service.type=LoadBalancer \
             --set app.service.port=4554 \
