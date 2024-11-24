@@ -53,9 +53,27 @@ jobs:
         uses: azure/setup-helm@v3
         with:
           version: 'v3.12.0'
+      
+      # Step 8: Check helm version
+      - name: Verify Helm version
+        run: helm version
 
-      # Step 8: Deploy to Kubernetes using Helm
+      # Step 9: Set up kubeconfig for Kubernetes
+      - name: Set up kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > kubeconfig
+          export KUBECONFIG=$PWD/kubeconfig
+
+      # Step 10: Test config context
+      - name: Test Kubernetes connection
+        run: kubectl get nodes
+        env:
+          KUBECONFIG: $PWD/kubeconfig
+
+      # Step 11: Deploy to Kubernetes using Helm
       - name: Deploy application with Helm
+        env:
+          KUBECONFIG: $PWD/kubeconfig
         run: |
           helm upgrade --install my-app ./helm-chart \
             --set app.image.repository=158.160.44.209:5000/${{ env.REPO }} \
