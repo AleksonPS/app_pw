@@ -64,8 +64,12 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > kubeconfig
           export KUBECONFIG=$PWD/kubeconfig
 
+      # Step: Debug API server connection
+      - name: Debug API server connection
+        run: curl -k https://89.169.140.22:6443/version
+      
       # Step 10: Test config context
-      - name: Test Kubernetes connection
+      - name: Verify Kubernetes connection
         run: kubectl get nodes
         env:
           KUBECONFIG: $PWD/kubeconfig
