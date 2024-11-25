@@ -1,4 +1,4 @@
-name: Build, Push, and Deploy
+name: Deploy
 
 on:
   push:
@@ -6,16 +6,16 @@ on:
       - '*'
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
         - name: Check secret content
-          run: echo "${{ secrets.KUBECONFIG }}" | base64 --decode
+          run: echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode
             
         - name: Save kubeconfig
           run: |
-            eecho "${{ secrets.KUBECONFIG }}" | base64 --decode > /tmp/kubeconfig
+            eecho "${{ secrets.KUBE_CONFIG }}" | base64 --decode > /tmp/kubeconfig
             chmod +r /tmp/kubeconfig
             
         - name: Verify Kubernetes connection
