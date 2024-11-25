@@ -39,9 +39,9 @@ jobs:
       # Step 6: Verify Kubernetes connection
       - name: Verify Kubernetes connection
         run: |
+          echo "${{ secrets.KUBECONFIG }}" > /tmp/kubeconfig
+          export KUBECONFIG=/tmp/kubeconfig
           kubectl get nodes
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
 
       # Step 7: Extract Git tag for image versioning
       - name: Extract Git tag
