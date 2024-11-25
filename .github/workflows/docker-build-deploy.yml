@@ -41,7 +41,8 @@ jobs:
         run: |
           echo "${{ secrets.KUBECONFIG }}" > /tmp/kubeconfig
           export KUBECONFIG=/tmp/kubeconfig
-          kubectl get nodes --insecure-skip-tls-verify
+          cat /tmp/kubeconfig
+          kubectl --kubeconfig=/tmp/kubeconfig get nodes --insecure-skip-tls-verify
 
       # Step 7: Extract Git tag for image versioning
       - name: Extract Git tag
