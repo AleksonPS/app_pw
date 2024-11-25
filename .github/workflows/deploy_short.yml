@@ -15,7 +15,7 @@ jobs:
             
         - name: Save kubeconfig
           run: |
-            eecho "${{ secrets.KUBE_CONFIG }}" | base64 --decode > /tmp/kubeconfig
+            echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > /tmp/kubeconfig
             chmod +r /tmp/kubeconfig
             
         - name: Verify Kubernetes connection
