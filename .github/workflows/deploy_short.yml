@@ -11,11 +11,11 @@ jobs:
 
     steps:
         - name: Check secret content
-          run: echo "${{ secrets.KUBECONFIG }}"
+          run: echo "${{ secrets.KUBECONFIG }}" | base64 --decode
             
         - name: Save kubeconfig
           run: |
-            echo "${{ secrets.KUBECONFIG }}" > /tmp/kubeconfig
+            eecho "${{ secrets.KUBECONFIG }}" | base64 --decode > /tmp/kubeconfig
             chmod +r /tmp/kubeconfig
             
         - name: Verify Kubernetes connection
