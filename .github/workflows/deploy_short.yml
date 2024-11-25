@@ -20,5 +20,5 @@ jobs:
             
         - name: Verify Kubernetes connection
           run: |
-            export KUBECONFIG=/tmp/kubeconfig
+            export KUBECONFIG=/home/alps/.kube/config
             kubectl get nodes --insecure-skip-tls-verify=true
