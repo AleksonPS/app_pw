@@ -41,7 +41,7 @@ jobs:
         run: |
           kubectl get nodes
         env:
-          KUBECONFIG: $PWD/kubeconfig
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
 
       # Step 7: Extract Git tag for image versioning
       - name: Extract Git tag
@@ -74,7 +74,7 @@ jobs:
         env:
           KUBECONFIG: $PWD/kubeconfig
         run: |
-          helm upgrade --install my-app ./helm-chart \
+          helm upgrade --install app-pw ./helm-chart \
             --set app.image.repository=${{ secrets.SRV_IP }}:5000/${{ env.REPO }} \
             --set app.image.tag=${{ env.TAG }} \
             --set app.service.type=LoadBalancer \
