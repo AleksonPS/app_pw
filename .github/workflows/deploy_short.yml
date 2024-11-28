@@ -12,10 +12,10 @@ jobs:
     steps:
       - name: Set up Kubernetes environment
         run: |
-          mkdir -p ~/.kube
-          echo "$KUBE_CA" > ~/.kube/ca.crt
-          echo "$KUBE_TOKEN" > ~/.kube/token
-          kubectl config set-cluster my-cluster --server=$KUBE_SERVER --certificate-authority=~/.kube/ca.crt
+          mkdir -p $HOME/.kube
+          echo "$KUBE_CA" > $HOME/.kube/ca.crt
+          echo "$KUBE_TOKEN" > $HOME/.kube/token
+          kubectl config set-cluster my-cluster --server=$KUBE_SERVER --certificate-authority=$HOME/.kube/ca.crt
           kubectl config set-credentials github-action --token=$KUBE_TOKEN
           kubectl config set-context github-action-context --cluster=my-cluster --user=github-action
           kubectl config use-context github-action-context
