@@ -10,15 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-        - name: Check secret content
-          run: echo "${{ secrets.KUBECONFIG }}"
-            
-        - name: Save kubeconfig
-          run: |
-            echo "${{ secrets.KUBECONFIG }}" > /tmp/kubeconfig
-            chmod +r /tmp/kubeconfig
-            
-        - name: Verify Kubernetes connection
-          run: |
-            export KUBECONFIG=/home/alps/.kube/config
-            kubectl get nodes --insecure-skip-tls-verify=true
+      - name: Set up Kubernetes environment
+        run: |
+          mkdir -p ~/.kube
+          echo "$KUBE_CA" > ~/.kube/ca.crt
+          echo "$KUBE_TOKEN" > ~/.kube/token
+          kubectl config set-cluster my-cluster --server=$KUBE_SERVER --certificate-authority=~/.kube/ca.crt
+          kubectl config set-credentials github-action --token=$KUBE_TOKEN
+          kubectl config set-context github-action-context --cluster=my-cluster --user=github-action
+          kubectl config use-context github-action-context
+
+      - name: Check Kubernetes nodes
+        run: kubectl get nodes
+        env:
+          KUBE_SERVER: ${{ secrets.KUBE_SERVER }}
+          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+          KUBE_CA: ${{ secrets.KUBE_CA }}

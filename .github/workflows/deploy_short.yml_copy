@@ -1,0 +1,24 @@
+name: Deploy
+
+on:
+  push:
+    tags: # Trigger pipeline on Git tags
+      - '*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: Check secret content
+          run: echo "${{ secrets.KUBECONFIG }}"
+            
+        - name: Save kubeconfig
+          run: |
+            echo "${{ secrets.KUBECONFIG }}" > /tmp/kubeconfig
+            chmod +r /tmp/kubeconfig
+            
+        - name: Verify Kubernetes connection
+          run: |
+            export KUBECONFIG=/home/alps/.kube/config
+            kubectl get nodes --insecure-skip-tls-verify=true
