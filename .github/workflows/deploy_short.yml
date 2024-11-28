@@ -10,19 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up Kubernetes environment
+      - name: Create kubeconfig
         run: |
           mkdir -p $HOME/.kube
-          echo "$KUBE_CA" > $HOME/.kube/ca.crt
-          echo "$KUBE_TOKEN" > $HOME/.kube/token
-          kubectl config set-cluster my-cluster --server=$KUBE_SERVER --certificate-authority=$HOME/.kube/ca.crt
-          kubectl config set-credentials github-action --token=$KUBE_TOKEN
-          kubectl config set-context github-action-context --cluster=my-cluster --user=github-action
-          kubectl config use-context github-action-context
+          echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > $HOME/.kube/config
+          echo $HOME/.kube/config
+          cat $HOME/.kube/config          
 
-      - name: Check Kubernetes nodes
+      - name: Use context
+        run: kubectl config use-context kubernetes-admin@kubernetes
+      - name: Проверить ноды
         run: kubectl get nodes
-        env:
-          KUBE_SERVER: ${{ secrets.KUBE_SERVER }}
-          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
-          KUBE_CA: ${{ secrets.KUBE_CA }}
