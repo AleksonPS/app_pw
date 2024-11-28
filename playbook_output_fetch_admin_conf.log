@@ -1,0 +1,27 @@
+
+PLAY [Fetch admin.conf from master-1] ******************************************
+
+TASK [Gathering Facts] *********************************************************
+[0;32mok: [master-1][0m
+
+TASK [Ensure local artifacts directory exists] *********************************
+[0;32mok: [master-1 -> localhost][0m
+
+TASK [Fetch admin.conf from master-1] ******************************************
+[0;33mchanged: [master-1][0m
+
+TASK [Wait until kubeconfig file exists] ***************************************
+[0;32mok: [master-1 -> localhost][0m
+
+TASK [Replace server address in kubeconfig] ************************************
+[0;33mchanged: [master-1 -> localhost][0m
+
+TASK [Export KUBECONFIG environment variable locally] **************************
+[0;33mchanged: [master-1 -> localhost][0m
+
+TASK [Persist KUBECONFIG in shell profile] *************************************
+[0;33mchanged: [master-1 -> localhost][0m
+
+PLAY RECAP *********************************************************************
+[0;33mmaster-1[0m                   : [0;32mok=7   [0m [0;33mchanged=4   [0m unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
