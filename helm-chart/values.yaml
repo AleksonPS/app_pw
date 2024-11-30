@@ -6,7 +6,7 @@ app:
   env:
     DB_HOST: db
     DB_NAME: pw_db
-    DB_USER: vinhle
+    DB_USER: dbuser
     DB_PASS: password
 
 db:
@@ -16,7 +16,7 @@ db:
   port: 5432
   env:
     POSTGRES_DB: pw_db
-    POSTGRES_USER: vinhle
+    POSTGRES_USER: dbuser
     POSTGRES_PASSWORD: password
   storage:
     size: 1Gi
@@ -24,4 +24,4 @@ db:
 persistence:
   enabled: true
   accessMode: ReadWriteOnce
-  storageClass: "" # Use default storage class if empty
+  storageClass: "standard" # Use default storage class if empty
