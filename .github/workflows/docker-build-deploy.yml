@@ -77,7 +77,7 @@ jobs:
         run: |
           export KUBECONFIG=$HOME/.kube/config
           helm upgrade --install app-pw ./helm-chart \
-            --set app.image.repository=${{ secrets.SRV_IP }}:5000/${{ env.REPO }} \
+            --set app.image.repository=srv:5000/${{ env.REPO }} \
             --set app.image.tag=${{ env.TAG }} \
             --set app.service.type=LoadBalancer \
             --set app.service.port=4554 \
