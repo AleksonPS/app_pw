@@ -14,20 +14,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      ## Step 2: Set up kubeconfig for Kubernetes
-      #- name: Create kubeconfig
-      #  run: |
-      #    mkdir -p $HOME/.kube
-      #    echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
-      #    echo "Kubeconfig file created at $HOME/.kube/config"
-      #    cat $HOME/.kube/config   
-
+      # Step 2: Set up kubeconfig for Kubernetes
       - name: Create kubeconfig
         run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ~/.kube/config
-          echo "Kubeconfig file created at ~/.kube/config"
-          cat ~/.kube/config
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
+          echo "Kubeconfig file created at $HOME/.kube/config"
+          cat $HOME/.kube/config   
 
       # Step 3: Set up kubectl
       - name: Set up kubectl
@@ -80,8 +73,7 @@ jobs:
       # Step 12: Deploy application with Helm
       - name: Deploy application with Helm
         env:
-          #KUBECONFIG: $HOME/.kube/config
-          KUBECONFIG: ~/.kube/config
+          KUBECONFIG: /home/alps/.kube/config
         run: |
           helm upgrade --install app-pw ./helm-chart \
             --set app.image.repository=${{ secrets.SRV_IP }}:5000/${{ env.REPO }} \
