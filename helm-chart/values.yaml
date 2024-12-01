@@ -4,7 +4,7 @@ app:
     tag: latest
   port: 3003
   env:
-    DB_HOST: {{ .Release.Name }}-db
+    DB_HOST: app-pw-db
     DB_NAME: tutorial
     DB_USER: vinhle
     DB_PASS: password
