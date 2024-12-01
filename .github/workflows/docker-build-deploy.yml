@@ -73,7 +73,7 @@ jobs:
       # Step 12: Apply PersistentVolume manually
       - name: Apply PersistentVolume (PV)
         run: |
-          kubectl apply -f ./helm-chart/templates/persistentvolume.yaml
+          kubectl apply -f helm-chart/templates/persistentvolume.yaml
 
       # Step 13: Deploy application with Helm
       - name: Deploy application with Helm
