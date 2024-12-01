@@ -26,6 +26,7 @@ spec:
   selector:
     app: {{ .Release.Name }}-db
   ports:
-  - protocol: TCP
+  - name: postgres
+    protocol: TCP
     port: {{ .Values.db.port }}
     targetPort: {{ .Values.db.port }}
