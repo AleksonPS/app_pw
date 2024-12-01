@@ -71,10 +71,6 @@ jobs:
           docker push ${{ secrets.SRV_IP }}:5000/${{ env.REPO }}:${{ env.TAG }}
 
       # Step 12: Deploy application with Helm
-      - name: Create namespace if it doesn't exist
-        run: |
-          kubectl get namespace app-pw || kubectl create namespace app-pw
-          
       - name: Deploy application with Helm
         run: |
           export KUBECONFIG=$HOME/.kube/config
