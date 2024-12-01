@@ -74,7 +74,7 @@ jobs:
       - name: Deploy application with Helm
         run: |
           export KUBECONFIG=$HOME/.kube/config
-          helm upgrade --install ${{ env.TAG }} --create-namespace --namespace app-pw ./helm-chart \
+          helm upgrade --install ${{ env.TAG }} ./helm-chart \
             --set app.image.repository=srv:5000/${{ env.REPO }} \
             --set app.image.tag=${{ env.TAG }} \
             --set app.service.type=LoadBalancer \
