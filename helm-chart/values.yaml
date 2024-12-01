@@ -5,8 +5,8 @@ app:
   port: 3003
   env:
     DB_HOST: db
-    DB_NAME: pw_db
-    DB_USER: dbuser
+    DB_NAME: tutorial-dev
+    DB_USER: vinhle
     DB_PASS: password
 
 db:
@@ -15,8 +15,8 @@ db:
     tag: 13-alpine
   port: 5432
   env:
-    POSTGRES_DB: pw_db
-    POSTGRES_USER: dbuser
+    POSTGRES_DB: tutorial
+    POSTGRES_USER: vinhle
     POSTGRES_PASSWORD: password
   storage:
     size: 1Gi
