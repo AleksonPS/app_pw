@@ -73,7 +73,7 @@ jobs:
       # Render the Helm templates to a file
       - name: Render Helm Templates
         run: |
-          helm template my-release ./helm-chart --namespace default --set app.image.tag=${{ github.sha }} > rendered.yaml
+          helm template app-pw ./helm-chart --namespace app-pw --set app.image.tag=${{ github.sha }} > rendered.yaml
       
       # Apply the rendered YAML (this applies the PV, PVC, and the rest of the chart)
       - name: Apply Rendered YAML
@@ -86,7 +86,7 @@ jobs:
         #  KUBECONFIG: /home/alps/.kube/config
         run: |
           export KUBECONFIG=$HOME/.kube/config
-          helm upgrade --install app-pw ./helm-chart \
+          helm upgrade --install app-pw --namespace app-pw ./helm-chart \
             --set app.image.repository=srv:5000/${{ env.REPO }} \
             --set app.image.tag=${{ env.TAG }} \
             --set app.service.type=LoadBalancer \
