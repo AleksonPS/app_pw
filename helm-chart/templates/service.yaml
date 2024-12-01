@@ -22,3 +22,16 @@ spec:
   - protocol: TCP
     port: {{ .Values.db.port }}
     targetPort: {{ .Values.db.port }}
+
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-app
+spec:
+  selector:
+    app: {{ .Release.Name }}-app
+  ports:
+    - protocol: TCP
+      port: 80            # Internal port inside the cluster
+      targetPort: 3003     # Port your app is running on
+      nodePort: 30000      # External port (you can use any port in the range 30000-32767)
+  type: NodePort
