@@ -1,9 +1,9 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: app-pw
-  labels:
-    app.kubernetes.io/managed-by: Helm
-  annotations:
-    meta.helm.sh/release-name: app-pw
-    meta.helm.sh/release-namespace: app-pw
+#apiVersion: v1
+#kind: Namespace
+#metadata:
+#  name: app-pw
+#  labels:
+#    app.kubernetes.io/managed-by: Helm
+#  annotations:
+#    meta.helm.sh/release-name: app-pw
+#    meta.helm.sh/release-namespace: app-pw
