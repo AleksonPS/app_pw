@@ -33,5 +33,5 @@ spec:
     - protocol: TCP
       port: 3003            # Internal port inside the cluster
       targetPort: 3003     # Port your app is running on
-      nodePort: 3033      # External port (you can use any port in the range 30000-32767)
+      nodePort: 30033      # External port (you can use any port in the range 30000-32767)
   type: NodePort
