@@ -11,7 +11,7 @@ services:
     command: >
       sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:3003"
     environment:
-      - DB_HOST=db
+      - DB_HOST=app-pw-db
       - DB_NAME=tutorial-dev
       - DB_USER=vinhle
       - DB_PASS=password
