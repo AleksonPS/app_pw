@@ -70,17 +70,7 @@ jobs:
         run: |
           docker push ${{ secrets.SRV_IP }}:5000/${{ env.REPO }}:${{ env.TAG }}
 
-      # Render the Helm templates to a file
-      - name: Render Helm Templates
-        run: |
-          helm template app-pw ./helm-chart --namespace app-pw --set app.image.tag=${{ github.sha }} > rendered.yaml
-      
-      # Apply the rendered YAML (this applies the PV, PVC, and the rest of the chart)
-      - name: Apply Rendered YAML
-        run: |
-          kubectl apply -f rendered.yaml
-
-      # Step 13: Deploy application with Helm
+      # Step 12: Deploy application with Helm
       - name: Deploy application with Helm
         run: |
           export KUBECONFIG=$HOME/.kube/config
