@@ -11,10 +11,10 @@ spec:
     port: 3003
     targetPort: {{ .Values.app.port }}
     nodePort: 30033   # External port for NodePort service (range: 30000-32767)
-  - name: postgres  # Added name for the second port (for the database)
+  - name: postgres  
     protocol: TCP
-    port: {{ .Values.db.port }}       # Internal port for the database service
-    targetPort: {{ .Values.db.port }}  # Port your database is running on
+    port: {{ .Values.db.port }}       
+    targetPort: {{ .Values.db.port }}  
   type: NodePort
 
 ---
