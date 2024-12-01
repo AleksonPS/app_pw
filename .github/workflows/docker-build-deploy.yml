@@ -82,8 +82,6 @@ jobs:
 
       # Step 13: Deploy application with Helm
       - name: Deploy application with Helm
-        #env:
-        #  KUBECONFIG: /home/alps/.kube/config
         run: |
           export KUBECONFIG=$HOME/.kube/config
           helm upgrade --install app-pw --namespace app-pw ./helm-chart \

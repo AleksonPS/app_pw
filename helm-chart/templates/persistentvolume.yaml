@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Release.Name }}-db-pv  # This will be dynamically replaced by Helm with the release name
+  name: {{ .Release.Name }}-db-pv
+  namespace: {{ .Release.Namespace }}
 spec:
   capacity:
-    storage: 1Gi  # The size of the volume, must match the PVC request
+    storage: {{ .Values.db.storage.size }}
   accessModes:
-    - ReadWriteOnce  # This must match the accessMode in your PVC
-  persistentVolumeReclaimPolicy: Retain  # Policy for when the PV is deleted
-  storageClassName: "standard"  # This must match the PVC's storageClass
+    - {{ .Values.persistence.accessMode }}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.persistence.storageClass }}
   hostPath:
-    path: "/mnt/data/{{ .Release.Name }}-db"  # The path on the node, adjust for your setup
+    path: /mnt/data
