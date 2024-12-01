@@ -6,7 +6,8 @@ spec:
   selector:
     app: {{ .Release.Name }}-app
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 3003
     targetPort: {{ .Values.app.port }}
     nodePort: 30033   # External port for NodePort service (range: 30000-32767)
