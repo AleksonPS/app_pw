@@ -28,6 +28,8 @@ spec:
           value: {{ .Values.app.env.DB_USER }}
         - name: DB_PASS
           value: {{ .Values.app.env.DB_PASS }}
+        - name: DJANGO_ALLOWED_HOSTS
+          value: "*"
         command:
         - sh
         - -c
