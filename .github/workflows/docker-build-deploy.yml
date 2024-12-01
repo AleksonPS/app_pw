@@ -70,10 +70,15 @@ jobs:
         run: |
           docker push ${{ secrets.SRV_IP }}:5000/${{ env.REPO }}:${{ env.TAG }}
 
-      # Step 12: Apply PersistentVolume manually
-      - name: Apply PersistentVolume (PV)
+      # Render the Helm templates to a file
+      - name: Render Helm Templates
         run: |
-          kubectl apply -f helm-chart/templates/persistentvolume.yaml
+          helm template my-release ./helm-chart --namespace default --set app.image.tag=${{ github.sha }} > rendered.yaml
+      
+      # Apply the rendered YAML (this applies the PV, PVC, and the rest of the chart)
+      - name: Apply Rendered YAML
+        run: |
+          kubectl apply -f rendered.yaml
 
       # Step 13: Deploy application with Helm
       - name: Deploy application with Helm
